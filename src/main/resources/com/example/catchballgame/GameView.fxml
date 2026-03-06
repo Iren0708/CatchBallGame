@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.geometry.Insets?>
+
+<!-- главное окно игры -->
+<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.catchballgame.ViewModel.GameViewModel">
+    <children>
+        <!-- верхняя панель с информацией -->
+        <VBox spacing="5.0">
+            <Label fx:id="scoreLabel" text="счет: 0" style="-fx-font-size: 18px;"/>
+            <Label fx:id="statusLabel" text="игра активна" style="-fx-font-size: 14px;"/>
+        </VBox>
+        <!-- игровое поле -->
+        <Pane fx:id="gamePane" prefWidth="800" prefHeight="600" style="-fx-border-color: black;">
+            <!-- шарик с градиентом, onMouseClicked НЕ ДОЛЖНО БЫТЬ! -->
+            <Circle fx:id="ball" radius="30" stroke="black" strokeWidth="2"/>
+        </Pane>
+    </children>
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+</VBox>
