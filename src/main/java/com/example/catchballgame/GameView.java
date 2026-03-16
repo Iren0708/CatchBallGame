@@ -7,21 +7,19 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-// главный класс для запуска игры
 public class GameView extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        // загрузка fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/catchballgame/GameView.fxml"));
         VBox root = loader.load();
-        GameViewModel viewModel = loader.getController();  // получение viewmodel
+        GameViewModel viewModel = loader.getController();
 
         Scene scene = new Scene(root);
         stage.setTitle("лови шарик");
         stage.setScene(scene);
         stage.show();
 
-        // остановка таймера при закрытии
+        //остановка таймера при закрытии
         stage.setOnCloseRequest(event -> viewModel.shutdown());
     }
 
