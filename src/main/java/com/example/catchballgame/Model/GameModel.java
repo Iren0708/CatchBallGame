@@ -5,13 +5,15 @@ import javafx.scene.paint.Color;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
+import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
 
 public class GameModel {
     private final IntegerProperty score = new SimpleIntegerProperty(0);
     private final BooleanProperty gameActive = new SimpleBooleanProperty(true);
     private final DoubleProperty ballX = new SimpleDoubleProperty();
     private final DoubleProperty ballY = new SimpleDoubleProperty();
-    private final ObjectProperty<Color> ballColor = new SimpleObjectProperty<>(Color.RED);
+
 
     private Timer timer;
     private double fieldWidth = 800;
@@ -20,6 +22,7 @@ public class GameModel {
     private double dx = 2;
     private double dy = 2;
     private Random random = new Random();
+    private javafx.scene.shape.Circle ball;
 
     public GameModel() {
         setBallX(fieldWidth / 2);
@@ -103,23 +106,20 @@ public class GameModel {
     }
 
     //проверка попадания
-    public boolean handleHit(double clickX, double clickY) {
+    public boolean handleHit(double clickX, double clickY, Circle ball) {
         if (!isGameActive()) return false;
-        double distance = Math.sqrt(Math.pow(clickX - getBallX(), 2) + Math.pow(clickY - getBallY(), 2));
-        if (distance <= ballRadius) {
+        double distance = Math.sqrt(Math.pow(clickX - ball.getCenterX(), 2) + Math.pow(clickY - ball.getCenterY(), 2));
+        if (distance <= ball.getRadius()) {
             setScore(getScore() + 1);
-            setBallColor(randomColor());
+
+            int r = (int)(Math.random() * 256);
+            int g = (int)(Math.random() * 256);
+            int b = (int)(Math.random() * 256);
+            ball.setFill(Color.rgb(r, g, b));
+
             return true;
         }
         return false;
-    }
-
-    private Color randomColor() {
-        return Color.rgb(
-                random.nextInt(256),
-                random.nextInt(256),
-                random.nextInt(256)
-        );
     }
 
     public void stopGame() {
@@ -147,9 +147,7 @@ public class GameModel {
     public void setBallY(double value) { ballY.set(value); }
     public DoubleProperty ballYProperty() { return ballY; }
 
-    public Color getBallColor() { return ballColor.get(); }
-    public void setBallColor(Color value) { ballColor.set(value); }
-    public ObjectProperty<Color> ballColorProperty() { return ballColor; }
+
 
     public double getBallRadius() { return ballRadius; }
 }

@@ -8,6 +8,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.beans.binding.Bindings;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -48,7 +51,7 @@ public class GameViewModel implements Initializable {
         //привязки
         ball.centerXProperty().bind(model.ballXProperty());
         ball.centerYProperty().bind(model.ballYProperty());
-        ball.fillProperty().bind(model.ballColorProperty());
+
 
         scoreLabel.textProperty().bind(Bindings.concat("счет: ", model.scoreProperty()));
         statusLabel.textProperty().bind(Bindings.when(model.gameActiveProperty())
@@ -60,7 +63,7 @@ public class GameViewModel implements Initializable {
     }
 
     private void setupHandlers() {
-        ball.setOnMouseClicked(this::handleBallClick);
+        ball.setOnMouseClicked(this::onBallClick);
         gamePane.setOnMouseMoved(this::handleMouseMove);
 
         gamePane.setOnMouseClicked(event -> {
@@ -71,8 +74,19 @@ public class GameViewModel implements Initializable {
         });
     }
 
-    private void handleBallClick(MouseEvent event) {
-        model.handleHit(event.getX(), event.getY());
+    private void onBallClick(MouseEvent event) {
+        boolean hit = model.handleHit(event.getX(), event.getY(), ball);
+        if (hit) {
+            scoreLabel.textProperty().unbind();
+            scoreLabel.setText("счет: " + model.getScore());
+            scoreLabel.textProperty().bind(Bindings.concat("счет: ", model.scoreProperty()));
+
+            // подсветка красным
+            scoreLabel.setStyle("-fx-text-fill: red;");
+            PauseTransition pause = new PauseTransition(Duration.millis(300));
+            pause.setOnFinished(e -> scoreLabel.setStyle("-fx-text-fill: black;"));
+            pause.play();
+        }
         event.consume();
     }
 
